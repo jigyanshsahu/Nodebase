@@ -1,8 +1,11 @@
+import prisma from "@/lib/db"
 
-const page = () => {
+
+const page = async() => {
+  const users = await prisma.user.findMany();
   return (
-    <div>
-      hi
+    <div className=" flex h-screen justify-center items-center">
+  
     </div>
   )
 }

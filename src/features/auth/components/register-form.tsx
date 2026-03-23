@@ -28,7 +28,7 @@ import { authClient } from "@/lib/auth-client";
 
 const registerSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(1, "Password is required"),
+password: z.string().min(6, "Minimum 6 characters"),
   confirmPassword: z.string(),
 })
 .refine((data) => data.password === data.confirmPassword, {
@@ -70,30 +70,33 @@ export function RegisterForm() {
       onSuccess: () => {
         router.push("/");
       },
-      onError: () => {
-        toast.error("Something went wrong");
-      },
+      onError: (ctx: any) => {
+  console.log("FULL ERROR:", ctx);          // 🔴 full object
+  console.log("ERROR MESSAGE:", ctx?.error);
+  toast.error(ctx?.error?.message || "Signup failed");
+}
     });
   };
 
-  const onSubmit = async (values: RegisterFormValues) => {
-    await authClient.signUp.email(
-      {
-        name: values.email,
-        email: values.email,
-        password: values.password,
-        callbackURL: "/",
+const onSubmit = async (values: RegisterFormValues) => {
+  await authClient.signUp.email(
+    {
+      name: values.email.split("@")[0], // ✅ simple username
+      email: values.email,
+      password: values.password,
+      callbackURL: "/",
+    },
+    {
+      onSuccess: () => {
+        router.push("/");
       },
-      {
-        onSuccess: () => {
-          router.push("/");
-        },
-       onError: (ctx: any) => {
-  toast.error(ctx.error.message);
-}
-      }
-    )
-  };
+      onError: (ctx: any) => {
+        console.log("ERROR:", ctx);
+        toast.error(ctx.error.message);
+      },
+    }
+  );
+};
 
   const isPending = form.formState.isSubmitting;
 

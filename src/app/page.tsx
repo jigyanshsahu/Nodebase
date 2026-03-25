@@ -5,9 +5,9 @@ const page =async () => {
   await requireAuth();
   const data = await caller.getUsers();
   return (
-    <div>
+    <div className="flex ">
      protected server component 
-     {JSON.stringify(data)}
+    <div className="justify-center items-center " >{JSON.stringify(data)}</div> 
     </div>
   )
 }

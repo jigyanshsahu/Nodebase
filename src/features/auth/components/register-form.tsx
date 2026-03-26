@@ -71,7 +71,7 @@ export function RegisterForm() {
         router.push("/");
       },
       onError: (ctx: any) => {
-  console.log("FULL ERROR:", ctx);          // 🔴 full object
+  console.log("FULL ERROR:", ctx);         
   console.log("ERROR MESSAGE:", ctx?.error);
   toast.error(ctx?.error?.message || "Signup failed");
 }
